@@ -60,6 +60,16 @@
             >
               {{ action }}
             </button>
+            <button
+              v-for="action in meta.customRowActions ?? []"
+              :key="`custom-${action}`"
+              class="link primary-link"
+              type="button"
+              :data-testid="`custom-action-${row.id}-${action}`"
+              @click="runCustomAction(action, row)"
+            >
+              {{ action }}
+            </button>
           </td>
         </tr>
         <tr v-if="!rows.length">
@@ -97,8 +107,10 @@
 import { computed, onMounted, ref } from 'vue'
 
 import {
+  buildEvidencePackage,
   createEntry,
   downloadEntries,
+  downloadEvidencePackage,
   listEntries,
   moduleMeta,
   runAction as applyAction,
@@ -171,6 +183,21 @@ async function runAction(action: string, row: EntryRow) {
     const result = await applyAction(meta.key, Number(row.id), action)
     if (!result.ok) throw new Error(result.message)
     await reload()
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : '操作失败'
+  }
+}
+
+async function runCustomAction(action: string, row: EntryRow) {
+  errorMessage.value = ''
+  try {
+    if (action === '生成质量证据包') {
+      const result = await buildEvidencePackage(Number(row.id))
+      if (!result.ok) throw new Error(result.message)
+      await reload()
+    } else if (action === '下载证据包') {
+      await downloadEvidencePackage(Number(row.id))
+    }
   } catch (error) {
     errorMessage.value = error instanceof Error ? error.message : '操作失败'
   }

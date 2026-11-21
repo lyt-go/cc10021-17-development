@@ -15,6 +15,7 @@ from app.services.tag_classify import TagClassifyService
 from app.services.dq_template import DqTemplateService
 from app.services.anomaly_pattern import AnomalyPatternService
 from app.services.dq_report import DqReportService
+from app.services.dq_evidence_package import DqEvidencePackageService
 from app.services.metadata_diff import MetadataDiffService
 from app.services.dq_alert_channel import DqAlertChannelService
 from app.services.dq_baseline import DqBaselineService
@@ -35,6 +36,7 @@ SERVICES: dict[str, BaseModuleService] = {
     "dq_template": DqTemplateService(),
     "anomaly_pattern": AnomalyPatternService(),
     "dq_report": DqReportService(),
+    "dq_evidence_package": DqEvidencePackageService(),
     "metadata_diff": MetadataDiffService(),
     "dq_alert_channel": DqAlertChannelService(),
     "dq_baseline": DqBaselineService(),
